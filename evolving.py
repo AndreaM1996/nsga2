@@ -8,7 +8,7 @@ def evolve(generation, ranks, fronts, parm=False):
     cd = [crowd_distance(generation, j, check_front(j, fronts)) for j in range(len(generation))]
 
     if parm == False:  # for every other generation
-        n = math.floor(len(generation) / 2)
+        n = len(generation) - 2
         Pt1 = sort_parents(fronts, cd, n)
         generationPt1 = []
         ranksPt1 = []
@@ -23,7 +23,7 @@ def evolve(generation, ranks, fronts, parm=False):
         cdPt1 = cd
         n = len(generationPt1)
 
-    Qt1 = children(generationPt1, ranksPt1, cdPt1, n)
+    Qt1 = children(generationPt1, ranksPt1, cdPt1, 2)
 
     final_gen = generationPt1 + Qt1
 

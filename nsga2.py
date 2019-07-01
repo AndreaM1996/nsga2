@@ -4,12 +4,14 @@ from evolving import evolve
 
 
 def nsga2(gen0, max_gen):
-    gen = 0
-    generation = gen0
+    fronts, ranks = nd_sort(gen0)
+
+    generation = evolve(gen0, ranks, fronts, True)
     fronts, ranks = nd_sort(generation)
+    gen = 1
 
     while gen < max_gen:  # until we exceed max generation number, evolve
-        generation = evolve(generation, ranks, fronts, True)
+        generation = evolve(generation, ranks, fronts, False)
         fronts, ranks = nd_sort(generation)
         gen += 1
 
