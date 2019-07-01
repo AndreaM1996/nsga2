@@ -69,15 +69,22 @@ def crowd_distance(population, j, front):
                       (max(f2) - min(f2))
 
 
+def sort_ind_by_cd(cd, front):  # sort values of crowd distance of indices in front by descending order
+    d = {}
+    for ind in front:
+        d[ind] = cd[ind]
+    items = [(v, k) for k, v in d.items()]
+    items = sorted(items, reverse=True)
+    return [k for v, k in items]
+
+
 def sort_parents(fronts, cd, n):
     Pt1 = []
     for front in fronts:
         if len(Pt1) + len(front) <= n:
             Pt1 += front  # we copy first few fronts
         else:
-            cd_Pt_sorted = sort_by_values(cd, front)  # sort values of crowd distance of indices in front by ascending order
-            cd_Pt_sorted.reverse()  # reverse, by descending order
-            ind_cd_sort = [cd.index(cdp) for cdp in cd_Pt_sorted]  # indices of such sorted list
+            ind_cd_sort = sort_ind_by_cd(cd, front)  # indices of such sorted list
             k = n - len(Pt1) + 1
             Pt1 += ind_cd_sort[:k]  # take only first n-len(Pt1) of them (which have the largest crowd distance)
 

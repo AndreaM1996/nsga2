@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 from nsga2 import nsga2
 import random
 
-pop_size = 100
+pop_size = 10
 
 
 gen0 = [[random.uniform(0, 1) for j in range(0, 5)] for i in range(pop_size)]
