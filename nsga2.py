@@ -6,32 +6,15 @@ from evolving import evolve
 def nsga2(gen0, max_gen):
     gen = 0
     generation = gen0
-
-    # below we evaluate objective functions for the first generation, sort in fronts and evolve first generation
-    f1 = []
-    f2 = []
-    for individual in generation:
-        values = f_values(individual)
-        f1.append(values[0])
-        f2.append(values[1])
-
-    fronts, ranks = nd_sort(generation, f1, f2)
-    generation = evolve(generation, ranks, fronts, f1, f2, parm=True)
+    fronts, ranks = nd_sort(generation)
 
     while gen < max_gen:  # until we exceed max generation number, evolve
-        generation = evolve(generation, ranks, fronts, f1, f2)
-
-        f1 = []
-        f2 = []
-        for individual in generation:
-            values = f_values(individual)
-            f1.append(values[0])
-            f2.append(values[1])
-
-        fronts, ranks = nd_sort(generation, f1, f2)
-
+        generation = evolve(generation, ranks, fronts, True)
+        fronts, ranks = nd_sort(generation)
         gen += 1
 
+    f1 = [f_values(individual)[0] for individual in generation]
+    f2 = [f_values(individual)[1] for individual in generation]
     pareto_x = []
     pareto_y = []
     for ind in fronts[0]:

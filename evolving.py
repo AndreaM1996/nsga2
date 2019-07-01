@@ -1,19 +1,20 @@
 from sorting_strategy import crowd_distance
 from sorting_strategy import check_front, sort_parents
 from evolution_strategy import children
+import math
 
 
-def evolve(generation, ranks, fronts, f1, f2, parm=False):
-    cd = [crowd_distance(f1, f2, j, check_front(j, fronts)) for j in range(len(generation))]
+def evolve(generation, ranks, fronts, parm=False):
+    cd = [crowd_distance(generation, j, check_front(j, fronts)) for j in range(len(generation))]
 
     if parm == False:  # for every other generation
-        n = len(generation)/2
+        n = math.floor(len(generation) / 2)
         Pt1 = sort_parents(fronts, cd, n)
         generationPt1 = []
         ranksPt1 = []
         cdPt1 = []
         for ind in Pt1:
-            generationPt1.append(generation[ind]) # individual with index in Pt1
+            generationPt1.append(generation[ind])  # individual with index in Pt1
             ranksPt1.append(ranks[ind])  # rank for such individual
             cdPt1.append(cd[ind])  # crowd distance for such individual
     else:  # for first generation

@@ -1,4 +1,5 @@
 import math
+from functions import f_values
 
 
 def check_front(j, fronts):
@@ -12,7 +13,10 @@ def sort_by_values(list1, list2):  # create list of values from list1 with indic
     return sorted(values)
 
 
-def nd_sort(population, f1, f2):
+def nd_sort(population):
+    f1 = [f_values(individual)[0] for individual in population]
+    f2 = [f_values(individual)[1] for individual in population]
+
     Sp = [[] for i in range(len(population))]
     np = [0 for i in range(len(population))]
     front = [[]]
@@ -49,7 +53,9 @@ def nd_sort(population, f1, f2):
     return front, rank
 
 
-def crowd_distance(f1, f2, j, front):
+def crowd_distance(population, j, front):
+    f1 = [f_values(individual)[0] for individual in population]
+    f2 = [f_values(individual)[1] for individual in population]
     sorted_front1 = sort_by_values(f1, front)
     sorted_front2 = sort_by_values(f2, front)
 
@@ -65,17 +71,15 @@ def crowd_distance(f1, f2, j, front):
 
 def sort_parents(fronts, cd, n):
     Pt1 = []
-    front = fronts[0]
-    i = 0
-    while len(Pt1) + len(front) <= n:
-        Pt1 += front  # we copy first few fronts
-        i += 1
-        front = fronts[i]
-
-    cd_Pt_sorted = sort_by_values(cd, front)  # sort values of crowd distance of indices in front by ascending order
-    cd_Pt_sorted.reverse()  # reverse, by descending order
-    ind_cd_sort = [cd.index(cdp) for cdp in cd_Pt_sorted]  # indices of such sorted list
-    Pt1.append(ind_cd_sort[:n - len(Pt1) + 1])  # take only first n-len(Pt1) of them (which have the largest crowd distance)
+    for front in fronts:
+        if len(Pt1) + len(front) <= n:
+            Pt1 += front  # we copy first few fronts
+        else:
+            cd_Pt_sorted = sort_by_values(cd, front)  # sort values of crowd distance of indices in front by ascending order
+            cd_Pt_sorted.reverse()  # reverse, by descending order
+            ind_cd_sort = [cd.index(cdp) for cdp in cd_Pt_sorted]  # indices of such sorted list
+            k = n - len(Pt1) + 1
+            Pt1 += ind_cd_sort[:k]  # take only first n-len(Pt1) of them (which have the largest crowd distance)
 
     return Pt1
 
